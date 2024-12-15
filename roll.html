@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rzucanie Kostką d20</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffe4b5; /* Kolor w stylu liska */
+            margin: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            text-align: center;
+            background-color: #fff8e1; /* Jasny, liski kolor tła */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .history {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0e68c; /* Kolor historyki */
+            border: 1px solid #ddd;
+            max-height: 200px;
+            overflow-y: auto;
+            border-radius: 10px;
+        }
+        .btn {
+            padding: 12px 25px;
+            margin: 5px;
+            background-color: #ff7f50; /* Pomarańczowy, liski kolor */
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #ff4500; /* Zmiana koloru przy najechaniu */
+        }
+        input[type="number"] {
+            padding: 5px;
+            width: 60px;
+            text-align: center;
+            border-radius: 5px;
+        }
+        h1 {
+            color: #d2691e; /* Kolor przypominający liska */
+            font-size: 28px;
+        }
+        #dice-result {
+            font-size: 20px;
+            color: #ff6347; /* Kolor wyników w stylu liska */
+            margin-top: 20px;
+        }
+        .fox-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 15px;
+        }
+        .history li {
+            font-size: 14px;
+            color: #8b4513;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="https://example.com/fox-icon.png" alt="Lisek" class="fox-icon"> <!-- Przykładowa ikona lisa -->
+    <h1>Rzucanie Kostką d20</h1>
+    <div>
+        <button class="btn" onclick="rollDice()">Rzuć Kostką d20</button>
+        <button class="btn" onclick="addModifier()">Dodaj Modyfikator</button>
+        <button class="btn" onclick="removeModifier()">Odejmij Modyfikator</button>
+    </div>
+
+    <div>
+        <label for="modifier">Aktualny Modyfikator: </label>
+        <span id="current-modifier">0</span>
+    </div>
+
+    <div id="dice-result" style="margin-top: 20px;"></div>
+
+    <div class="history">
+        <h3>Historia Rzutów:</h3>
+        <ul id="history-list"></ul>
+    </div>
+</div>
+
+<script>
+    let modifier = 0;
+    let history = [];
+
+    function rollDice() {
+        const roll = Math.floor(Math.random() * 20) + 1 + modifier;
+        const currentTime = new Date().toLocaleString(); // Pobiera datę i godzinę
+        const result = {
+            roll: roll,
+            time: currentTime
+        };
+        history.push(result);
+        updateHistory();
+        document.getElementById('dice-result').innerText = `Wynik rzutu: ${roll} (czas: ${currentTime})`;
+    }
+
+    function addModifier() {
+        const input = prompt("Podaj modyfikator do dodania:");
+        const value = parseInt(input);
+        if (!isNaN(value)) {
+            modifier += value;
+            document.getElementById('current-modifier').innerText = modifier;
+        }
+    }
+
+    function removeModifier() {
+        const input = prompt("Podaj modyfikator do odjęcia:");
+        const value = parseInt(input);
+        if (!isNaN(value)) {
+            modifier -= value;
+            document.getElementById('current-modifier').innerText = modifier;
+        }
+    }
+
+    function updateHistory() {
+        const historyList = document.getElementById('history-list');
+        historyList.innerHTML = '';
+        history.forEach((entry, index) => {
+            const li = document.createElement('li');
+            li.textContent = `Rzut ${index + 1}: ${entry.roll} (Czas: ${entry.time})`;
+            historyList.appendChild(li);
+        });
+    }
+</script>
+
+</body>
+</html>
